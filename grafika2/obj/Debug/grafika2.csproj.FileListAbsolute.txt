@@ -1,0 +1,10 @@
+C:\Users\Wojtek\source\repos\grafika2\grafika2\bin\Debug\grafika2.exe.config
+C:\Users\Wojtek\source\repos\grafika2\grafika2\bin\Debug\grafika2.exe
+C:\Users\Wojtek\source\repos\grafika2\grafika2\bin\Debug\grafika2.pdb
+C:\Users\Wojtek\source\repos\grafika2\grafika2\obj\Debug\grafika2.csprojAssemblyReference.cache
+C:\Users\Wojtek\source\repos\grafika2\grafika2\obj\Debug\grafika2.Properties.Resources.resources
+C:\Users\Wojtek\source\repos\grafika2\grafika2\obj\Debug\grafika2.csproj.GenerateResource.cache
+C:\Users\Wojtek\source\repos\grafika2\grafika2\obj\Debug\grafika2.csproj.CoreCompileInputs.cache
+C:\Users\Wojtek\source\repos\grafika2\grafika2\obj\Debug\grafika2.exe
+C:\Users\Wojtek\source\repos\grafika2\grafika2\obj\Debug\grafika2.pdb
+C:\Users\Wojtek\source\repos\grafika2\grafika2\obj\Debug\grafika2.Form1.resources

@@ -19,10 +19,14 @@ namespace grafika2
         private Matrix matRotX = new Matrix(4);
         private Matrix matProj = new Matrix(4);
 
+        private Vec3D vCamera = new Vec3D();
+
         Stopwatch stopwatch = new Stopwatch();
 
 
         float fTheta;
+
+        float brightness = 0.0F;
 
 
         private Bitmap bm = new Bitmap(400, 400);
@@ -118,8 +122,8 @@ namespace grafika2
                         points = new Vec3D[]
                         {
                             new Vec3D { x = 0.0f, y = 0.0f, z = 1.0f },
-                            new Vec3D { x = 0.0f, y = 1.0f, z = 1.0f },
-                            new Vec3D { x = 0.0f, y = 1.0f, z = 0.0f }
+                            new Vec3D { x = 0.0f, y = 1.0f, z = 0.0f },
+                            new Vec3D { x = 0.0f, y = 0.0f, z = 0.0f }
                         }
                     },                   
                     
@@ -177,8 +181,8 @@ namespace grafika2
                 gfx.FillRectangle(brush, 0, 0, bm.Width, bm.Height);
             };
 
-            fTheta = 0.0015F * (float)stopwatch.Elapsed.TotalMilliseconds;
-            
+            fTheta = 0.001F * (float)stopwatch.Elapsed.TotalMilliseconds;
+
             float fNear = 0.1F;
             float fFar = 1000.0F;
             float fFov = 90.0F;
@@ -237,27 +241,67 @@ namespace grafika2
                 triTranslated.points[1].z = triRotatedZX.points[1].z + 3.0F;
                 triTranslated.points[2].z = triRotatedZX.points[2].z + 3.0F;
 
-                // Project triangles from 3D --> 2D
-                Matrix.MultiplyMatrixVector(triTranslated.points[0], out triProjected.points[0], matProj);
-                Matrix.MultiplyMatrixVector(triTranslated.points[1], out triProjected.points[1], matProj);
-                Matrix.MultiplyMatrixVector(triTranslated.points[2], out triProjected.points[2], matProj);
+                Vec3D normal, line1, line2;
 
-                // Scale into view
-                triProjected.points[0].x += 1.0F; triProjected.points[0].y += 1.0F;
-                triProjected.points[1].x += 1.0F; triProjected.points[1].y += 1.0F;
-                triProjected.points[2].x += 1.0F; triProjected.points[2].y += 1.0F;
-                triProjected.points[0].x *= 0.5F * (float)bm.Width;
-                triProjected.points[0].y *= 0.5F * (float)bm.Height;
-                triProjected.points[1].x *= 0.5F * (float)bm.Width;
-                triProjected.points[1].y *= 0.5F * (float)bm.Height;
-                triProjected.points[2].x *= 0.5F * (float)bm.Width;
-                triProjected.points[2].y *= 0.5F * (float)bm.Height;
+                line1.x = triTranslated.points[1].x - triTranslated.points[0].x;
+                line1.y = triTranslated.points[1].y - triTranslated.points[0].y;
+                line1.z = triTranslated.points[1].z - triTranslated.points[0].z;
 
-                PainterHelper.DrawTriangle(triProjected, bm);
+                line2.x = triTranslated.points[2].x - triTranslated.points[0].x;
+                line2.y = triTranslated.points[2].y - triTranslated.points[0].y;
+                line2.z = triTranslated.points[2].z - triTranslated.points[0].z;
 
-                pictureBoxCanvas.Image = bm;
+                normal.x = line1.y * line2.z - line1.z * line2.y;
+                normal.y = line1.z * line2.x - line1.x * line2.z;
+                normal.z = line1.x * line2.y - line1.y * line2.x;
 
+                // It's normally normal to normalise the normal
+                float l = (float)Math.Sqrt(normal.x * normal.x + normal.y * normal.y + normal.z * normal.z);
+                normal.x /= l; normal.y /= l; normal.z /= l;
+
+                //if(normal.z < 0)
+                if (normal.x * (triTranslated.points[0].x - vCamera.x) +
+                    normal.y * (triTranslated.points[0].y - vCamera.y) +
+                    normal.z * (triTranslated.points[0].z - vCamera.z) < 0.0F)
+                {
+                    // Project triangles from 3D --> 2D
+                    Matrix.MultiplyMatrixVector(triTranslated.points[0], out triProjected.points[0], matProj);
+                    Matrix.MultiplyMatrixVector(triTranslated.points[1], out triProjected.points[1], matProj);
+                    Matrix.MultiplyMatrixVector(triTranslated.points[2], out triProjected.points[2], matProj);
+
+                    // Scale into view
+                    triProjected.points[0].x += 1.0F;
+                    triProjected.points[0].y += 1.0F;
+
+                    triProjected.points[1].x += 1.0F;
+                    triProjected.points[1].y += 1.0F;
+
+                    triProjected.points[2].x += 1.0F;
+                    triProjected.points[2].y += 1.0F;
+
+                    triProjected.points[0].x *= 0.5F * (float)bm.Width;
+                    triProjected.points[0].y *= 0.5F * (float)bm.Height;
+                    triProjected.points[1].x *= 0.5F * (float)bm.Width;
+                    triProjected.points[1].y *= 0.5F * (float)bm.Height;
+                    triProjected.points[2].x *= 0.5F * (float)bm.Width;
+                    triProjected.points[2].y *= 0.5F * (float)bm.Height;
+
+                    PainterHelper.DrawTriangle(triProjected, bm);
+
+                    pictureBoxCanvas.Image = bm;
+                }
             }
+
+            //brightness += 0.01F;
+
+            //using (Graphics gfx = Graphics.FromImage(bm))
+            //using (SolidBrush brush = new SolidBrush(PainterHelper.ChangeColorBrightness(Color.Black, brightness)))
+            //{
+            //    gfx.FillRectangle(brush, 0, 0, bm.Width, bm.Height);
+            //};
+
+            //pictureBoxCanvas.Image = bm;
+
         }
     }
 }

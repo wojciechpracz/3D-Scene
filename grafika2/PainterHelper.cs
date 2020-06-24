@@ -9,7 +9,7 @@ namespace grafika2
 {
     static class PainterHelper
     {
-        public static void DrawTriangle(Triangle triangle, Bitmap bm)
+        public static void DrawTriangle(Triangle triangle, Bitmap bm, Color color)
         {
             Point[] points = new Point[3];
 
@@ -24,8 +24,8 @@ namespace grafika2
             }
 
             using (Graphics gfx = Graphics.FromImage(bm))
-            using (SolidBrush brush = new SolidBrush(Color.White))
-            using(SolidBrush paintBrush = new SolidBrush(Color.Aqua))
+            using (SolidBrush brush = new SolidBrush(Color.Black))
+            using(SolidBrush paintBrush = new SolidBrush(color))
             using (Pen pen = new Pen(brush))
             {
 

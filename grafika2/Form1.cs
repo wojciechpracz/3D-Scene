@@ -26,9 +26,6 @@ namespace grafika2
 
         float fTheta;
 
-        float brightness = 0.0F;
-
-
         private Bitmap bm = new Bitmap(400, 400);
 
         public Form1()
@@ -264,6 +261,15 @@ namespace grafika2
                     normal.y * (triTranslated.points[0].y - vCamera.y) +
                     normal.z * (triTranslated.points[0].z - vCamera.z) < 0.0F)
                 {
+
+                    Vec3D lightDirection = new Vec3D { x = 0.0F, y = 0.0F, z = -1.0F };
+                    float li = (float)Math.Sqrt(lightDirection.x * lightDirection.x + lightDirection.y * lightDirection.y + lightDirection.z * lightDirection.z);
+                    lightDirection.x /= li; lightDirection.y /= li; lightDirection.z /= li;
+
+                    float dp = normal.x * lightDirection.x + normal.y * lightDirection.y + normal.z * lightDirection.z;
+
+                    Color color = PainterHelper.ChangeColorBrightness(Color.Black, dp);
+
                     // Project triangles from 3D --> 2D
                     Matrix.MultiplyMatrixVector(triTranslated.points[0], out triProjected.points[0], matProj);
                     Matrix.MultiplyMatrixVector(triTranslated.points[1], out triProjected.points[1], matProj);
@@ -286,7 +292,7 @@ namespace grafika2
                     triProjected.points[2].x *= 0.5F * (float)bm.Width;
                     triProjected.points[2].y *= 0.5F * (float)bm.Height;
 
-                    PainterHelper.DrawTriangle(triProjected, bm);
+                    PainterHelper.DrawTriangle(triProjected, bm, color);
 
                     pictureBoxCanvas.Image = bm;
                 }

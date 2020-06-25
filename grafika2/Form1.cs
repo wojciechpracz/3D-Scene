@@ -23,6 +23,7 @@ namespace grafika2
 
 
         private Vec3D vCamera = new Vec3D();
+        private Vec3D vLookDir = new Vec3D();
 
         Stopwatch stopwatch = new Stopwatch();
 
@@ -42,135 +43,8 @@ namespace grafika2
 
         private Mesh CreateCube()
         {
-            //Mesh meshCube = new Mesh
-            //{
-            //    triangles = new List<Triangle>
-            //    {
-            //        //SOUTH
-            //        new Triangle
-            //        {
-            //            points = new Vec3D[]
-            //            {
-            //                new Vec3D { x = 0.0f, y = 0.0f, z = 0.0f },
-            //                new Vec3D { x = 0.0f, y = 1.0f, z = 0.0f },
-            //                new Vec3D { x = 1.0f, y = 1.0f, z = 0.0f }
-            //            }
-            //        },
-            //        new Triangle
-            //        {
-            //            points = new Vec3D[]
-            //            {
-            //                new Vec3D { x = 0.0f, y = 0.0f, z = 0.0f },
-            //                new Vec3D { x = 1.0f, y = 1.0f, z = 0.0f },
-            //                new Vec3D { x = 1.0f, y = 0.0f, z = 0.0f }
-            //            }
-            //        },
-
-            //        //EAST
-            //        new Triangle
-            //        {
-            //            points = new Vec3D[]
-            //            {
-            //                new Vec3D { x = 1.0f, y = 0.0f, z = 0.0f },
-            //                new Vec3D { x = 1.0f, y = 1.0f, z = 0.0f },
-            //                new Vec3D { x = 1.0f, y = 1.0f, z = 1.0f }
-            //            }
-            //        },
-            //        new Triangle
-            //        {
-            //            points = new Vec3D[]
-            //            {
-            //                new Vec3D { x = 1.0f, y = 0.0f, z = 0.0f },
-            //                new Vec3D { x = 1.0f, y = 1.0f, z = 1.0f },
-            //                new Vec3D { x = 1.0f, y = 0.0f, z = 1.0f }
-            //            }
-            //        },
-
-            //        //NORTH
-            //        new Triangle
-            //        {
-            //            points = new Vec3D[]
-            //            {
-            //                new Vec3D { x = 1.0f, y = 0.0f, z = 1.0f },
-            //                new Vec3D { x = 1.0f, y = 1.0f, z = 1.0f },
-            //                new Vec3D { x = 0.0f, y = 1.0f, z = 1.0f }
-            //            }
-            //        },
-            //        new Triangle
-            //        {
-            //            points = new Vec3D[]
-            //            {
-            //                new Vec3D { x = 1.0f, y = 0.0f, z = 1.0f },
-            //                new Vec3D { x = 0.0f, y = 1.0f, z = 1.0f },
-            //                new Vec3D { x = 0.0f, y = 0.0f, z = 1.0f }
-            //            }
-            //        },
-
-            //        //WEST
-            //        new Triangle
-            //        {
-            //            points = new Vec3D[]
-            //            {
-            //                new Vec3D { x = 0.0f, y = 0.0f, z = 1.0f },
-            //                new Vec3D { x = 0.0f, y = 1.0f, z = 1.0f },
-            //                new Vec3D { x = 0.0f, y = 1.0f, z = 0.0f }
-            //            }
-            //        },
-            //        new Triangle
-            //        {
-            //            points = new Vec3D[]
-            //            {
-            //                new Vec3D { x = 0.0f, y = 0.0f, z = 1.0f },
-            //                new Vec3D { x = 0.0f, y = 1.0f, z = 0.0f },
-            //                new Vec3D { x = 0.0f, y = 0.0f, z = 0.0f }
-            //            }
-            //        },                   
-
-            //        //TOP
-            //        new Triangle
-            //        {
-            //            points = new Vec3D[]
-            //            {
-            //                new Vec3D { x = 0.0f, y = 1.0f, z = 0.0f, },
-            //                new Vec3D { x = 0.0f, y = 1.0f, z = 1.0f },
-            //                new Vec3D { x = 1.0f, y = 1.0f, z = 1.0f }
-            //            }
-            //        },
-            //        new Triangle
-            //        {
-            //            points = new Vec3D[]
-            //            {
-            //                new Vec3D { x = 0.0f, y = 1.0f, z = 0.0f },
-            //                new Vec3D { x = 1.0f, y = 1.0f, z = 1.0f },
-            //                new Vec3D { x = 1.0f, y = 1.0f, z = 0.0f }
-            //            }
-            //        },
-
-
-            //        //BOTTOM
-            //        new Triangle
-            //        {
-            //            points = new Vec3D[]
-            //            {
-            //                new Vec3D { x = 1.0f, y = 0.0f, z = 1.0f, },
-            //                new Vec3D { x = 0.0f, y = 0.0f, z = 1.0f },
-            //                new Vec3D { x = 0.0f, y = 0.0f, z = 0.0f }
-            //            }
-            //        },
-            //        new Triangle
-            //        {
-            //            points = new Vec3D[]
-            //            {
-            //                new Vec3D { x = 1.0f, y = 0.0f, z = 1.0f },
-            //                new Vec3D { x = 0.0f, y = 0.0f, z = 0.0f },
-            //                new Vec3D { x = 1.0f, y = 0.0f, z = 0.0f }
-            //            }
-            //        },
-            //    }
-            //};
-
             Mesh sphere = new Mesh();
-            sphere.LoadFromObject("scene.obj");
+            sphere.LoadFromObject("axis.obj");
 
             return sphere;
         }
@@ -183,25 +57,34 @@ namespace grafika2
                 gfx.FillRectangle(brush, 0, 0, bm.Width, bm.Height);
             };
 
-            fTheta = 0.0005F * (float)stopwatch.Elapsed.TotalMilliseconds;
+            //fTheta = 0.0005F * (float)stopwatch.Elapsed.TotalMilliseconds;
 
             List<Triangle> trianglesToRaster = new List<Triangle>();
 
+            vLookDir = new Vec3D { x = 0, y = 0, z = 1 };
+            Vec3D vUp = new Vec3D { x = 0, y = 1, z = 0 };
+            Vec3D vTarget = VectorAdd(vCamera, vLookDir);
+
+            Matrix matCamera = Matrix_PointAt(vCamera, vTarget, vUp);
+
+            Matrix matView = Matrix_QuickInverse(matCamera);
+
             meshCube = CreateCube();
             matProj = Matrix_MakeProjection(90.0F, (float)bm.Width / (float)bm.Height, 0.1F, 1000.0F);
-            matRotZ = Matrix_MakeRotationZ(fTheta * 0.5F);
-            matRotX = Matrix_MakeRotationX(fTheta * 0.5F);
-            matTrans = Matrix_MakeTranslation(0.0F, 0.0F, 5.0F);
+            matRotZ = Matrix_MakeRotationZ(fTheta);
+            matRotX = Matrix_MakeRotationX(fTheta);
+            matTrans = Matrix_MakeTranslation(0.0F, 0.0F, 16.0F);
             matWorld = Matrix_MakeIdentity();
             matWorld = Matrix_MultiplyMatrix(matRotZ, matRotX);
             matWorld = Matrix_MultiplyMatrix(matWorld, matTrans);
 
             foreach (var tri in meshCube.triangles)
             {
-                Triangle triProjected, triTransformed;
+                Triangle triProjected, triTransformed, triViewed;
 
                 triProjected = new Triangle(3);
                 triTransformed = new Triangle(3);
+                triViewed = new Triangle(3);
 
 
                 triTransformed.points[0] = Matrix.MatrixMultiplyVector(tri.points[0], matWorld);
@@ -233,10 +116,14 @@ namespace grafika2
 
                     Color color = PainterHelper.ChangeColorBrightness(Color.Black, dp);
 
+                    triViewed.points[0] = Matrix.MatrixMultiplyVector(triTransformed.points[0], matView);
+                    triViewed.points[1] = Matrix.MatrixMultiplyVector(triTransformed.points[1], matView);
+                    triViewed.points[2] = Matrix.MatrixMultiplyVector(triTransformed.points[2], matView);
+
                     // Project triangles from 3D --> 2D
-                    triProjected.points[0] = Matrix.MatrixMultiplyVector(triTransformed.points[0], matProj);
-                    triProjected.points[1] = Matrix.MatrixMultiplyVector(triTransformed.points[1], matProj);
-                    triProjected.points[2] = Matrix.MatrixMultiplyVector(triTransformed.points[2], matProj);
+                    triProjected.points[0] = Matrix.MatrixMultiplyVector(triViewed.points[0], matProj);
+                    triProjected.points[1] = Matrix.MatrixMultiplyVector(triViewed.points[1], matProj);
+                    triProjected.points[2] = Matrix.MatrixMultiplyVector(triViewed.points[2], matProj);
 
                     triProjected.points[0] = VectorDiv(triProjected.points[0], triProjected.points[0].w);
                     triProjected.points[1] = VectorDiv(triProjected.points[1], triProjected.points[1].w);
@@ -420,6 +307,39 @@ namespace grafika2
                 return matrix;
             }
 
+            Matrix Matrix_PointAt(Vec3D pos, Vec3D target, Vec3D up)
+            {
+                Vec3D newForward = VectorSub(target, pos);
+                newForward = VectorNormalise(newForward);
+
+                Vec3D a = VectorMul(newForward, VectorDotProduct(up, newForward));
+                Vec3D newUp = VectorSub(up, a);
+                newUp = VectorNormalise(newUp);
+
+                Vec3D newRight = VectorCrossProduct(newUp, newForward);
+
+                Matrix matrix = new Matrix(4);
+
+                matrix.matrix[0,0] = newRight.x; matrix.matrix[0,1] = newRight.y; matrix.matrix[0,2] = newRight.z; matrix.matrix[0,3] = 0.0f;
+                matrix.matrix[1,0] = newUp.x; matrix.matrix[1,1] = newUp.y; matrix.matrix[1,2] = newUp.z; matrix.matrix[1,3] = 0.0f;
+                matrix.matrix[2,0] = newForward.x; matrix.matrix[2,1] = newForward.y; matrix.matrix[2,2] = newForward.z; matrix.matrix[2,3] = 0.0f;
+                matrix.matrix[3,0] = pos.x; matrix.matrix[3,1] = pos.y; matrix.matrix[3,2] = pos.z; matrix.matrix[3,3] = 1.0f;
+
+                return matrix;
+            }
+            
+            Matrix Matrix_QuickInverse(Matrix m) // Only for Rotation/Translation Matrices
+	        {
+                Matrix matrix = new Matrix(4);
+                matrix.matrix[0,0] = m.matrix[0,0]; matrix.matrix[0,1] = m.matrix[1,0]; matrix.matrix[0,2] = m.matrix[2,0]; matrix.matrix[0,3] = 0.0f;
+                matrix.matrix[1,0] = m.matrix[0,1]; matrix.matrix[1,1] = m.matrix[1,1]; matrix.matrix[1,2] = m.matrix[2,1]; matrix.matrix[1,3] = 0.0f;
+                matrix.matrix[2,0] = m.matrix[0,2]; matrix.matrix[2,1] = m.matrix[1,2]; matrix.matrix[2,2] = m.matrix[2,2]; matrix.matrix[2,3] = 0.0f;
+                matrix.matrix[3,0] = -(m.matrix[3,0] * matrix.matrix[0,0] + m.matrix[3,1] * matrix.matrix[1,0] + m.matrix[3,2] * matrix.matrix[2,0]);
+                matrix.matrix[3,1] = -(m.matrix[3,0] * matrix.matrix[0,1] + m.matrix[3,1] * matrix.matrix[1,1] + m.matrix[3,2] * matrix.matrix[2,1]);
+                matrix.matrix[3,2] = -(m.matrix[3,0] * matrix.matrix[0,2] + m.matrix[3,1] * matrix.matrix[1,2] + m.matrix[3,2] * matrix.matrix[2,2]);
+                matrix.matrix[3,3] = 1.0f;
+                return matrix;
+            }
         }
     }
 }

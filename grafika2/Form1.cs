@@ -15,9 +15,12 @@ namespace grafika2
     public partial class Form1 : Form
     {
         private Mesh meshCube;
-        private Matrix matRotZ = new Matrix (4);
-        private Matrix matRotX = new Matrix(4);
-        private Matrix matProj = new Matrix(4);
+        private Matrix matRotZ;
+        private Matrix matRotX;
+        private Matrix matProj;
+        private Matrix matTrans;
+        private Matrix matWorld;
+
 
         private Vec3D vCamera = new Vec3D();
 
@@ -182,101 +185,58 @@ namespace grafika2
 
             fTheta = 0.0005F * (float)stopwatch.Elapsed.TotalMilliseconds;
 
-            float fNear = 0.1F;
-            float fFar = 1000.0F;
-            float fFov = 90.0F;
-
             List<Triangle> trianglesToRaster = new List<Triangle>();
 
-            float fAspectRatio = (float)bm.Height / (float)bm.Width;
-
-            float fFovRad = (float)(1.0 / Math.Tan(fFov * 0.5 / 180.0 * 3.14159));
-
-            matProj.matrix[0, 0] = fAspectRatio * fFovRad;
-            matProj.matrix[1, 1] = fFovRad;
-            matProj.matrix[2, 2] = fFar / (fFar - fNear);
-            matProj.matrix[3, 2] = (-fFar * fNear) / (fFar - fNear);
-            matProj.matrix[2, 3] = 1.0F;
-            matProj.matrix[3, 3] = 0.0F;
-
             meshCube = CreateCube();
-
-            // Rotation Z
-            matRotZ.matrix[0, 0] = (float)Math.Cos(fTheta);
-            matRotZ.matrix[0, 1] = (float)Math.Sin(fTheta);
-            matRotZ.matrix[1, 0] = (float)(Math.Sin(fTheta) * -1);
-            matRotZ.matrix[1, 1] = (float)Math.Cos(fTheta);
-            matRotZ.matrix[2, 2] = 1;
-            matRotZ.matrix[3, 3] = 1;
-
-            // Rotation X
-            matRotX.matrix[0, 0] = 1;
-            matRotX.matrix[1, 1] = (float)Math.Cos(fTheta * 0.5F);
-            matRotX.matrix[1, 2] = (float)Math.Sin(fTheta * 0.5F);
-            matRotX.matrix[2, 1] = (float)(Math.Sin(fTheta * 0.5F) * -1);
-            matRotX.matrix[2, 2] = (float)Math.Cos(fTheta * 0.5F);
-            matRotX.matrix[3, 3] = 1;
+            matProj = Matrix_MakeProjection(90.0F, (float)bm.Width / (float)bm.Height, 0.1F, 1000.0F);
+            matRotZ = Matrix_MakeRotationZ(fTheta * 0.5F);
+            matRotX = Matrix_MakeRotationX(fTheta * 0.5F);
+            matTrans = Matrix_MakeTranslation(0.0F, 0.0F, 5.0F);
+            matWorld = Matrix_MakeIdentity();
+            matWorld = Matrix_MultiplyMatrix(matRotZ, matRotX);
+            matWorld = Matrix_MultiplyMatrix(matWorld, matTrans);
 
             foreach (var tri in meshCube.triangles)
             {
-                Triangle triProjected, triTranslated, triRotatedZ, triRotatedZX;
+                Triangle triProjected, triTransformed;
 
                 triProjected = new Triangle(3);
-                triTranslated = new Triangle(3);
-                triRotatedZ = new Triangle(3);
-                triRotatedZX = new Triangle(3);
+                triTransformed = new Triangle(3);
 
-                // Rotate in Z-Axiss
-                Matrix.MultiplyMatrixVector(tri.points[0], out triRotatedZ.points[0], matRotZ);
-                Matrix.MultiplyMatrixVector(tri.points[1], out triRotatedZ.points[1], matRotZ);
-                Matrix.MultiplyMatrixVector(tri.points[2], out triRotatedZ.points[2], matRotZ);
 
-                // Rotate in X-Axis
-                Matrix.MultiplyMatrixVector(triRotatedZ.points[0], out triRotatedZX.points[0], matRotX);
-                Matrix.MultiplyMatrixVector(triRotatedZ.points[1], out triRotatedZX.points[1], matRotX);
-                Matrix.MultiplyMatrixVector(triRotatedZ.points[2], out triRotatedZX.points[2], matRotX);
-
-                // Offset into the screen
-                triTranslated = triRotatedZX;
-                triTranslated.points[0].z = triRotatedZX.points[0].z + 7.0F;
-                triTranslated.points[1].z = triRotatedZX.points[1].z + 7.0F;
-                triTranslated.points[2].z = triRotatedZX.points[2].z + 7.0F;
+                triTransformed.points[0] = Matrix.MatrixMultiplyVector(tri.points[0], matWorld);
+                triTransformed.points[1] = Matrix.MatrixMultiplyVector(tri.points[1], matWorld);
+                triTransformed.points[2] = Matrix.MatrixMultiplyVector(tri.points[2], matWorld);
 
                 Vec3D normal, line1, line2;
 
-                line1.x = triTranslated.points[1].x - triTranslated.points[0].x;
-                line1.y = triTranslated.points[1].y - triTranslated.points[0].y;
-                line1.z = triTranslated.points[1].z - triTranslated.points[0].z;
+                normal = new Vec3D();
+                line1 = new Vec3D();
+                line2 = new Vec3D();
 
-                line2.x = triTranslated.points[2].x - triTranslated.points[0].x;
-                line2.y = triTranslated.points[2].y - triTranslated.points[0].y;
-                line2.z = triTranslated.points[2].z - triTranslated.points[0].z;
+                line1 = VectorSub(triTransformed.points[1], triTransformed.points[0]);
+                line2 = VectorSub(triTransformed.points[2], triTransformed.points[0]);
 
-                normal.x = line1.y * line2.z - line1.z * line2.y;
-                normal.y = line1.z * line2.x - line1.x * line2.z;
-                normal.z = line1.x * line2.y - line1.y * line2.x;
+                normal = VectorCrossProduct(line1, line2);
 
-                float l = (float)Math.Sqrt(normal.x * normal.x + normal.y * normal.y + normal.z * normal.z);
-                normal.x /= l; normal.y /= l; normal.z /= l;
+                normal = VectorNormalise(normal);
+
+                Vec3D vCameraRay = VectorSub(triTransformed.points[0], vCamera);
 
                 //if(normal.z < 0)
-                if (normal.x * (triTranslated.points[0].x - vCamera.x) +
-                    normal.y * (triTranslated.points[0].y - vCamera.y) +
-                    normal.z * (triTranslated.points[0].z - vCamera.z) < 0.0F)
+                if (VectorDotProduct(normal, vCameraRay) < 0.0F)
                 {
+                    Vec3D light_direction = new Vec3D{ x = 0.0f, y = 1.0f, z = -1.0f };
+                    light_direction = VectorNormalise(light_direction);
 
-                    Vec3D lightDirection = new Vec3D { x = 0.0F, y = 0.0F, z = -1.0F };
-                    float li = (float)Math.Sqrt(lightDirection.x * lightDirection.x + lightDirection.y * lightDirection.y + lightDirection.z * lightDirection.z);
-                    lightDirection.x /= li; lightDirection.y /= li; lightDirection.z /= li;
-
-                    float dp = normal.x * lightDirection.x + normal.y * lightDirection.y + normal.z * lightDirection.z;
+                    float dp = (float)Math.Max(0.1f, VectorDotProduct(light_direction, normal));
 
                     Color color = PainterHelper.ChangeColorBrightness(Color.Black, dp);
 
                     // Project triangles from 3D --> 2D
-                    Matrix.MultiplyMatrixVector(triTranslated.points[0], out triProjected.points[0], matProj);
-                    Matrix.MultiplyMatrixVector(triTranslated.points[1], out triProjected.points[1], matProj);
-                    Matrix.MultiplyMatrixVector(triTranslated.points[2], out triProjected.points[2], matProj);
+                    Matrix.MultiplyMatrixVector(triTransformed.points[0], triProjected.points[0], matProj);
+                    Matrix.MultiplyMatrixVector(triTransformed.points[1], triProjected.points[1], matProj);
+                    Matrix.MultiplyMatrixVector(triTransformed.points[2], triProjected.points[2], matProj);
 
                     // Scale into view
                     triProjected.points[0].x += 1.0F;
@@ -325,6 +285,139 @@ namespace grafika2
             //};
 
             //pictureBoxCanvas.Image = bm;
+
+            Vec3D VectorAdd(Vec3D v1, Vec3D v2)
+            {
+                return new Vec3D { x = v1.x + v2.x, y = v1.y + v2.y, z = v1.z + v2.z };
+            }
+
+            Vec3D VectorSub(Vec3D v1, Vec3D v2)
+            {
+                return new Vec3D { x = v1.x - v2.x, y = v1.y - v2.y, z = v1.z - v2.z };
+            }
+
+            Vec3D VectorMul(Vec3D v1, float k)
+            {
+                return new Vec3D { x = v1.x * k, y = v1.y * k, z = v1.z * k };
+            }
+
+            Vec3D VectorDiv(Vec3D v1, float k)
+            {
+                return new Vec3D { x = v1.x / k, y = v1.y / k, z = v1.z / k };
+            }
+
+            float VectorDotProduct(Vec3D v1, Vec3D v2)
+            {
+                return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+            }
+
+            float VectorLength(Vec3D v)
+            {
+                return (float)Math.Sqrt(VectorDotProduct(v, v));
+            }
+
+            Vec3D VectorNormalise(Vec3D v)
+            {
+                float l = VectorLength(v);
+                return new Vec3D { x = v.x / l, y = v.y / l, z = v.z / l };
+            }
+
+            Vec3D VectorCrossProduct(Vec3D v1, Vec3D v2)
+            {
+                Vec3D v = new Vec3D();
+
+                v.x = v1.y * v2.z - v1.z * v2.y;
+                v.y = v1.z * v2.x - v1.x * v2.z;
+                v.z = v1.x * v2.y - v1.y * v2.x;
+
+                return v;
+            }
+
+            Matrix Matrix_MakeIdentity()
+            {
+                Matrix matrix = new Matrix(4);
+                matrix.matrix[0, 0] = 1.0f;
+                matrix.matrix[1, 1] = 1.0f;
+                matrix.matrix[2, 2] = 1.0f;
+                matrix.matrix[3, 3] = 1.0f;
+                return matrix;
+            }
+
+            Matrix Matrix_MakeRotationX(float fAngleRad)
+            {
+                Matrix matRotX = new Matrix(4);
+                matRotX.matrix[0, 0] = 1;
+                matRotX.matrix[1, 1] = (float)Math.Cos(fAngleRad);
+                matRotX.matrix[1, 2] = (float)Math.Sin(fAngleRad);
+                matRotX.matrix[2, 1] = (float)(Math.Sin(fAngleRad) * -1);
+                matRotX.matrix[2, 2] = (float)Math.Cos(fAngleRad);
+                matRotX.matrix[3, 3] = 1;
+                return matRotX;
+            }
+
+            Matrix Matrix_MakeRotationY(float fAngleRad)
+            {
+                Matrix matRotY = new Matrix(4);
+                matRotY.matrix[0, 0] = (float)Math.Cos(fAngleRad);
+                matRotY.matrix[0, 2] = (float)Math.Sin(fAngleRad);
+                matRotY.matrix[2, 0] = (float)(Math.Sin(fAngleRad) * -1);
+                matRotY.matrix[1, 1] = 1.0F;
+                matRotY.matrix[2, 2] = (float)Math.Cos(fTheta * 0.5F);
+                matRotY.matrix[3, 3] = 1.0F;
+                return matRotY;
+            }
+
+            Matrix Matrix_MakeRotationZ(float fAngleRad)
+            {
+                Matrix matRotZ = new Matrix(4);
+
+                matRotZ.matrix[0, 0] = (float)Math.Cos(fAngleRad);
+                matRotZ.matrix[0, 1] = (float)Math.Sin(fAngleRad);
+                matRotZ.matrix[1, 0] = (float)(Math.Sin(fAngleRad) * -1);
+                matRotZ.matrix[1, 1] = (float)Math.Cos(fAngleRad);
+                matRotZ.matrix[2, 2] = 1;
+                matRotZ.matrix[3, 3] = 1;
+
+                return matRotZ;
+            }
+
+            Matrix Matrix_MakeTranslation(float x, float y, float z)
+            {
+                Matrix matrix = new Matrix(4);
+
+                matrix.matrix[0, 0] = 1.0f;
+                matrix.matrix[1, 1] = 1.0f;
+                matrix.matrix[2, 2] = 1.0f;
+                matrix.matrix[3, 3] = 1.0f;
+                matrix.matrix[3, 0] = x;
+                matrix.matrix[3, 1] = y;
+                matrix.matrix[3, 2] = z;
+
+                return matrix;
+            }
+
+            Matrix Matrix_MakeProjection(float fFovDegrees, float fAspectRatio, float fNear, float fFar)
+            {
+                float fFovRad = 1.0f / (float)Math.Tan(fFovDegrees * 0.5f / 180.0f * 3.14159f);
+                Matrix matrix = new Matrix(4);
+                matrix.matrix[0, 0] = fAspectRatio * fFovRad;
+                matrix.matrix[1, 1] = fFovRad;
+                matrix.matrix[2, 2] = fFar / (fFar - fNear);
+                matrix.matrix[3, 2] = (-fFar * fNear) / (fFar - fNear);
+                matrix.matrix[2, 3] = 1.0f;
+                matrix.matrix[3, 3] = 0.0f;
+                return matrix;
+            }
+
+
+            Matrix Matrix_MultiplyMatrix(Matrix m1, Matrix m2)
+            {
+                Matrix matrix = new Matrix(4);
+                for (int c = 0; c < 4; c++)
+                    for (int r = 0; r < 4; r++)
+                        matrix.matrix[r, c] = m1.matrix[r, 0] * m2.matrix[0, c] + m1.matrix[r, 1] * m2.matrix[1, c] + m1.matrix[r, 2] * m2.matrix[2, c] + m1.matrix[r, 3] * m2.matrix[3, c];
+                return matrix;
+            }
 
         }
     }

@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace grafika2
 {
-    struct Vec3D
+    class Vec3D
     {
         public float x, y, z;
+        public float w = 1;
     }
 }

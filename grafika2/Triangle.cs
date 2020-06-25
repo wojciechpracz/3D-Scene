@@ -15,7 +15,7 @@ namespace grafika2
         public float zTotal;
         public Triangle(int arraySize = 3)
         {
-            points = new Vec3D[arraySize];
+            points = new Vec3D[] { new Vec3D (), new Vec3D(), new Vec3D() } ;
             color = Color.Black;
             zTotal = 0;
         }

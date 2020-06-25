@@ -33,6 +33,9 @@ namespace grafika2
                     if (line[0] == 'v')
                     {
                         Vec3D vect;
+
+                        vect = new Vec3D(); 
+
                         string[] parts = line.Split(' ');
 
 

@@ -38,7 +38,7 @@
             // 
             this.pictureBoxCanvas.Location = new System.Drawing.Point(12, 12);
             this.pictureBoxCanvas.Name = "pictureBoxCanvas";
-            this.pictureBoxCanvas.Size = new System.Drawing.Size(400, 400);
+            this.pictureBoxCanvas.Size = new System.Drawing.Size(800, 800);
             this.pictureBoxCanvas.TabIndex = 0;
             this.pictureBoxCanvas.TabStop = false;
             // 
@@ -52,7 +52,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(422, 428);
+            this.ClientSize = new System.Drawing.Size(826, 838);
             this.Controls.Add(this.pictureBoxCanvas);
             this.Name = "Form1";
             this.Text = "Form1";

@@ -32,7 +32,7 @@ namespace grafika2
 
         float fTheta;
 
-        private Bitmap bm = new Bitmap(400, 400);
+        private Bitmap bm = new Bitmap(800, 800);
 
         public Form1()
         {
@@ -47,7 +47,7 @@ namespace grafika2
         private Mesh CreateCube()
         {
             Mesh sphere = new Mesh();
-            sphere.LoadFromObject("axis.obj");
+            sphere.LoadFromObject("scene2.obj");
 
             return sphere;
         }
@@ -60,7 +60,7 @@ namespace grafika2
                 gfx.FillRectangle(brush, 0, 0, bm.Width, bm.Height);
             };
 
-            elapsedTime = (float)stopwatch.Elapsed.TotalMilliseconds * 0.00003F;
+            elapsedTime = (float)stopwatch.Elapsed.TotalMilliseconds * 0.000021F;
 
             //fTheta = 0.0005F * (float)stopwatch.Elapsed.TotalMilliseconds;
 
@@ -365,22 +365,22 @@ namespace grafika2
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Up)
-                vCamera.y += 8.0F * elapsedTime;
+                vCamera.y += 2.0F * elapsedTime;
 
 
             if (e.KeyCode == Keys.Down)
-                vCamera.y -= 8.0F * elapsedTime;
+                vCamera.y -= 2.0F * elapsedTime;
 
             if (e.KeyCode == Keys.Left)
-                vCamera.x -= 8.0F * elapsedTime;
+                vCamera.x += 2.0F * elapsedTime;
 
 
             if (e.KeyCode == Keys.Right)
-                vCamera.x += 8.0F * elapsedTime;
+                vCamera.x -= 2.0F * elapsedTime;
 
 
 
-            Vec3D vForward = VectorMul(vLookDir, 8.0F * elapsedTime);
+            Vec3D vForward = VectorMul(vLookDir, 2.0F * elapsedTime);
 
             if (e.KeyCode == Keys.W)
                 vCamera = VectorAdd(vCamera, vForward);
@@ -389,10 +389,10 @@ namespace grafika2
                 vCamera = VectorSub(vCamera, vForward);
 
             if (e.KeyCode == Keys.A)
-                fYaw -= 2.0F * elapsedTime;
+                fYaw -= 0.2F * elapsedTime;
 
             if (e.KeyCode == Keys.D)
-                fYaw += 2.0F * elapsedTime;
+                fYaw += 0.2F * elapsedTime;
 
         }
     }

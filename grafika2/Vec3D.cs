@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace grafika2
 {
-    class Vec3D
+    public class Vec3D
     {
         public float x, y, z;
         public float w = 1;

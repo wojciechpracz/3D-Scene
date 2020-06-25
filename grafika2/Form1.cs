@@ -234,19 +234,20 @@ namespace grafika2
                     Color color = PainterHelper.ChangeColorBrightness(Color.Black, dp);
 
                     // Project triangles from 3D --> 2D
-                    Matrix.MultiplyMatrixVector(triTransformed.points[0], triProjected.points[0], matProj);
-                    Matrix.MultiplyMatrixVector(triTransformed.points[1], triProjected.points[1], matProj);
-                    Matrix.MultiplyMatrixVector(triTransformed.points[2], triProjected.points[2], matProj);
+                    triProjected.points[0] = Matrix.MatrixMultiplyVector(triTransformed.points[0], matProj);
+                    triProjected.points[1] = Matrix.MatrixMultiplyVector(triTransformed.points[1], matProj);
+                    triProjected.points[2] = Matrix.MatrixMultiplyVector(triTransformed.points[2], matProj);
+
+                    triProjected.points[0] = VectorDiv(triProjected.points[0], triProjected.points[0].w);
+                    triProjected.points[1] = VectorDiv(triProjected.points[1], triProjected.points[1].w);
+                    triProjected.points[2] = VectorDiv(triProjected.points[2], triProjected.points[2].w);
 
                     // Scale into view
-                    triProjected.points[0].x += 1.0F;
-                    triProjected.points[0].y += 1.0F;
+                    Vec3D vOffsetView = new Vec3D { x = 1, y = 1, z = 0 };
 
-                    triProjected.points[1].x += 1.0F;
-                    triProjected.points[1].y += 1.0F;
-
-                    triProjected.points[2].x += 1.0F;
-                    triProjected.points[2].y += 1.0F;
+                    triProjected.points[0] = VectorAdd(triProjected.points[0], vOffsetView);
+                    triProjected.points[1] = VectorAdd(triProjected.points[1], vOffsetView);
+                    triProjected.points[2] = VectorAdd(triProjected.points[2], vOffsetView);
 
                     triProjected.points[0].x *= 0.5F * (float)bm.Width;
                     triProjected.points[0].y *= 0.5F * (float)bm.Height;

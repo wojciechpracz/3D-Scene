@@ -23,7 +23,6 @@ namespace grafika2
 
         Stopwatch stopwatch = new Stopwatch();
 
-
         float fTheta;
 
         private Bitmap bm = new Bitmap(400, 400);
@@ -40,134 +39,137 @@ namespace grafika2
 
         private Mesh CreateCube()
         {
-            Mesh meshCube = new Mesh
-            {
-                triangles = new List<Triangle>
-                {
-                    //SOUTH
-                    new Triangle
-                    {
-                        points = new Vec3D[]
-                        {
-                            new Vec3D { x = 0.0f, y = 0.0f, z = 0.0f },
-                            new Vec3D { x = 0.0f, y = 1.0f, z = 0.0f },
-                            new Vec3D { x = 1.0f, y = 1.0f, z = 0.0f }
-                        }
-                    },
-                    new Triangle
-                    {
-                        points = new Vec3D[]
-                        {
-                            new Vec3D { x = 0.0f, y = 0.0f, z = 0.0f },
-                            new Vec3D { x = 1.0f, y = 1.0f, z = 0.0f },
-                            new Vec3D { x = 1.0f, y = 0.0f, z = 0.0f }
-                        }
-                    },
+            //Mesh meshCube = new Mesh
+            //{
+            //    triangles = new List<Triangle>
+            //    {
+            //        //SOUTH
+            //        new Triangle
+            //        {
+            //            points = new Vec3D[]
+            //            {
+            //                new Vec3D { x = 0.0f, y = 0.0f, z = 0.0f },
+            //                new Vec3D { x = 0.0f, y = 1.0f, z = 0.0f },
+            //                new Vec3D { x = 1.0f, y = 1.0f, z = 0.0f }
+            //            }
+            //        },
+            //        new Triangle
+            //        {
+            //            points = new Vec3D[]
+            //            {
+            //                new Vec3D { x = 0.0f, y = 0.0f, z = 0.0f },
+            //                new Vec3D { x = 1.0f, y = 1.0f, z = 0.0f },
+            //                new Vec3D { x = 1.0f, y = 0.0f, z = 0.0f }
+            //            }
+            //        },
 
-                    //EAST
-                    new Triangle
-                    {
-                        points = new Vec3D[]
-                        {
-                            new Vec3D { x = 1.0f, y = 0.0f, z = 0.0f },
-                            new Vec3D { x = 1.0f, y = 1.0f, z = 0.0f },
-                            new Vec3D { x = 1.0f, y = 1.0f, z = 1.0f }
-                        }
-                    },
-                    new Triangle
-                    {
-                        points = new Vec3D[]
-                        {
-                            new Vec3D { x = 1.0f, y = 0.0f, z = 0.0f },
-                            new Vec3D { x = 1.0f, y = 1.0f, z = 1.0f },
-                            new Vec3D { x = 1.0f, y = 0.0f, z = 1.0f }
-                        }
-                    },
+            //        //EAST
+            //        new Triangle
+            //        {
+            //            points = new Vec3D[]
+            //            {
+            //                new Vec3D { x = 1.0f, y = 0.0f, z = 0.0f },
+            //                new Vec3D { x = 1.0f, y = 1.0f, z = 0.0f },
+            //                new Vec3D { x = 1.0f, y = 1.0f, z = 1.0f }
+            //            }
+            //        },
+            //        new Triangle
+            //        {
+            //            points = new Vec3D[]
+            //            {
+            //                new Vec3D { x = 1.0f, y = 0.0f, z = 0.0f },
+            //                new Vec3D { x = 1.0f, y = 1.0f, z = 1.0f },
+            //                new Vec3D { x = 1.0f, y = 0.0f, z = 1.0f }
+            //            }
+            //        },
 
-                    //NORTH
-                    new Triangle
-                    {
-                        points = new Vec3D[]
-                        {
-                            new Vec3D { x = 1.0f, y = 0.0f, z = 1.0f },
-                            new Vec3D { x = 1.0f, y = 1.0f, z = 1.0f },
-                            new Vec3D { x = 0.0f, y = 1.0f, z = 1.0f }
-                        }
-                    },
-                    new Triangle
-                    {
-                        points = new Vec3D[]
-                        {
-                            new Vec3D { x = 1.0f, y = 0.0f, z = 1.0f },
-                            new Vec3D { x = 0.0f, y = 1.0f, z = 1.0f },
-                            new Vec3D { x = 0.0f, y = 0.0f, z = 1.0f }
-                        }
-                    },
-                   
-                    //WEST
-                    new Triangle
-                    {
-                        points = new Vec3D[]
-                        {
-                            new Vec3D { x = 0.0f, y = 0.0f, z = 1.0f },
-                            new Vec3D { x = 0.0f, y = 1.0f, z = 1.0f },
-                            new Vec3D { x = 0.0f, y = 1.0f, z = 0.0f }
-                        }
-                    },
-                    new Triangle
-                    {
-                        points = new Vec3D[]
-                        {
-                            new Vec3D { x = 0.0f, y = 0.0f, z = 1.0f },
-                            new Vec3D { x = 0.0f, y = 1.0f, z = 0.0f },
-                            new Vec3D { x = 0.0f, y = 0.0f, z = 0.0f }
-                        }
-                    },                   
-                    
-                    //TOP
-                    new Triangle
-                    {
-                        points = new Vec3D[]
-                        {
-                            new Vec3D { x = 0.0f, y = 1.0f, z = 0.0f, },
-                            new Vec3D { x = 0.0f, y = 1.0f, z = 1.0f },
-                            new Vec3D { x = 1.0f, y = 1.0f, z = 1.0f }
-                        }
-                    },
-                    new Triangle
-                    {
-                        points = new Vec3D[]
-                        {
-                            new Vec3D { x = 0.0f, y = 1.0f, z = 0.0f },
-                            new Vec3D { x = 1.0f, y = 1.0f, z = 1.0f },
-                            new Vec3D { x = 1.0f, y = 1.0f, z = 0.0f }
-                        }
-                    },
+            //        //NORTH
+            //        new Triangle
+            //        {
+            //            points = new Vec3D[]
+            //            {
+            //                new Vec3D { x = 1.0f, y = 0.0f, z = 1.0f },
+            //                new Vec3D { x = 1.0f, y = 1.0f, z = 1.0f },
+            //                new Vec3D { x = 0.0f, y = 1.0f, z = 1.0f }
+            //            }
+            //        },
+            //        new Triangle
+            //        {
+            //            points = new Vec3D[]
+            //            {
+            //                new Vec3D { x = 1.0f, y = 0.0f, z = 1.0f },
+            //                new Vec3D { x = 0.0f, y = 1.0f, z = 1.0f },
+            //                new Vec3D { x = 0.0f, y = 0.0f, z = 1.0f }
+            //            }
+            //        },
 
-                                        
-                    //BOTTOM
-                    new Triangle
-                    {
-                        points = new Vec3D[]
-                        {
-                            new Vec3D { x = 1.0f, y = 0.0f, z = 1.0f, },
-                            new Vec3D { x = 0.0f, y = 0.0f, z = 1.0f },
-                            new Vec3D { x = 0.0f, y = 0.0f, z = 0.0f }
-                        }
-                    },
-                    new Triangle
-                    {
-                        points = new Vec3D[]
-                        {
-                            new Vec3D { x = 1.0f, y = 0.0f, z = 1.0f },
-                            new Vec3D { x = 0.0f, y = 0.0f, z = 0.0f },
-                            new Vec3D { x = 1.0f, y = 0.0f, z = 0.0f }
-                        }
-                    },
-                }
-            };
+            //        //WEST
+            //        new Triangle
+            //        {
+            //            points = new Vec3D[]
+            //            {
+            //                new Vec3D { x = 0.0f, y = 0.0f, z = 1.0f },
+            //                new Vec3D { x = 0.0f, y = 1.0f, z = 1.0f },
+            //                new Vec3D { x = 0.0f, y = 1.0f, z = 0.0f }
+            //            }
+            //        },
+            //        new Triangle
+            //        {
+            //            points = new Vec3D[]
+            //            {
+            //                new Vec3D { x = 0.0f, y = 0.0f, z = 1.0f },
+            //                new Vec3D { x = 0.0f, y = 1.0f, z = 0.0f },
+            //                new Vec3D { x = 0.0f, y = 0.0f, z = 0.0f }
+            //            }
+            //        },                   
 
-            return meshCube;
+            //        //TOP
+            //        new Triangle
+            //        {
+            //            points = new Vec3D[]
+            //            {
+            //                new Vec3D { x = 0.0f, y = 1.0f, z = 0.0f, },
+            //                new Vec3D { x = 0.0f, y = 1.0f, z = 1.0f },
+            //                new Vec3D { x = 1.0f, y = 1.0f, z = 1.0f }
+            //            }
+            //        },
+            //        new Triangle
+            //        {
+            //            points = new Vec3D[]
+            //            {
+            //                new Vec3D { x = 0.0f, y = 1.0f, z = 0.0f },
+            //                new Vec3D { x = 1.0f, y = 1.0f, z = 1.0f },
+            //                new Vec3D { x = 1.0f, y = 1.0f, z = 0.0f }
+            //            }
+            //        },
+
+
+            //        //BOTTOM
+            //        new Triangle
+            //        {
+            //            points = new Vec3D[]
+            //            {
+            //                new Vec3D { x = 1.0f, y = 0.0f, z = 1.0f, },
+            //                new Vec3D { x = 0.0f, y = 0.0f, z = 1.0f },
+            //                new Vec3D { x = 0.0f, y = 0.0f, z = 0.0f }
+            //            }
+            //        },
+            //        new Triangle
+            //        {
+            //            points = new Vec3D[]
+            //            {
+            //                new Vec3D { x = 1.0f, y = 0.0f, z = 1.0f },
+            //                new Vec3D { x = 0.0f, y = 0.0f, z = 0.0f },
+            //                new Vec3D { x = 1.0f, y = 0.0f, z = 0.0f }
+            //            }
+            //        },
+            //    }
+            //};
+
+            Mesh sphere = new Mesh();
+            sphere.LoadFromObject("scene.obj");
+
+            return sphere;
         }
 
         private void timerMain_Tick(object sender, EventArgs e)
@@ -178,11 +180,13 @@ namespace grafika2
                 gfx.FillRectangle(brush, 0, 0, bm.Width, bm.Height);
             };
 
-            fTheta = 0.001F * (float)stopwatch.Elapsed.TotalMilliseconds;
+            fTheta = 0.0005F * (float)stopwatch.Elapsed.TotalMilliseconds;
 
             float fNear = 0.1F;
             float fFar = 1000.0F;
             float fFov = 90.0F;
+
+            List<Triangle> trianglesToRaster = new List<Triangle>();
 
             float fAspectRatio = (float)bm.Height / (float)bm.Width;
 
@@ -234,9 +238,9 @@ namespace grafika2
 
                 // Offset into the screen
                 triTranslated = triRotatedZX;
-                triTranslated.points[0].z = triRotatedZX.points[0].z + 3.0F;
-                triTranslated.points[1].z = triRotatedZX.points[1].z + 3.0F;
-                triTranslated.points[2].z = triRotatedZX.points[2].z + 3.0F;
+                triTranslated.points[0].z = triRotatedZX.points[0].z + 7.0F;
+                triTranslated.points[1].z = triRotatedZX.points[1].z + 7.0F;
+                triTranslated.points[2].z = triRotatedZX.points[2].z + 7.0F;
 
                 Vec3D normal, line1, line2;
 
@@ -252,7 +256,6 @@ namespace grafika2
                 normal.y = line1.z * line2.x - line1.x * line2.z;
                 normal.z = line1.x * line2.y - line1.y * line2.x;
 
-                // It's normally normal to normalise the normal
                 float l = (float)Math.Sqrt(normal.x * normal.x + normal.y * normal.y + normal.z * normal.z);
                 normal.x /= l; normal.y /= l; normal.z /= l;
 
@@ -292,10 +295,25 @@ namespace grafika2
                     triProjected.points[2].x *= 0.5F * (float)bm.Width;
                     triProjected.points[2].y *= 0.5F * (float)bm.Height;
 
-                    PainterHelper.DrawTriangle(triProjected, bm, color);
+                    //PainterHelper.DrawTriangle(triProjected, bm, color);
 
-                    pictureBoxCanvas.Image = bm;
+                    //pictureBoxCanvas.Image = bm;
+                    triProjected.color = color;
+
+                    triProjected.zTotal = (triProjected.points[0].z + triProjected.points[1].z + triProjected.points[2].z) / 3.0F;
+
+                    trianglesToRaster.Add(triProjected);
                 }
+
+            }
+
+            trianglesToRaster.Sort((p,q) => q.zTotal.CompareTo(p.zTotal));
+
+            foreach (var triangle in trianglesToRaster)
+            {
+                PainterHelper.DrawTriangle(triangle, bm);
+
+                pictureBoxCanvas.Image = bm;
             }
 
             //brightness += 0.01F;

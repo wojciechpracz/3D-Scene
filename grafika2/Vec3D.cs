@@ -11,7 +11,6 @@ namespace grafika2
         public float x, y, z;
         public float w = 1;
 
-
         public static Vec3D VectorMul(Vec3D v1, float k)
         {
             return new Vec3D { x = v1.x * k, y = v1.y * k, z = v1.z * k };

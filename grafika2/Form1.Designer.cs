@@ -46,7 +46,7 @@
             // 
             this.timerMain.Enabled = true;
             this.timerMain.Interval = 10;
-            this.timerMain.Tick += new System.EventHandler(this.timerMain_Tick);
+            this.timerMain.Tick += new System.EventHandler(this.Render);
             // 
             // Form1
             // 

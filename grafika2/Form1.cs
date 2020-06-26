@@ -56,7 +56,7 @@ namespace grafika2
                 {
                     float lightIntensity = light.GetLightIntensityForSurface(triTransformed.Normal);
 
-                    Color color = PainterHelper.ChangeColorBrightness(Color.Black, dp);
+                    Color color = PainterHelper.ChangeColorBrightness(Color.Black, lightIntensity);
 
                     triViewed = Triangle.TransformTriangle(triTransformed, matView);
 

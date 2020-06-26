@@ -15,18 +15,14 @@ namespace grafika2
     {
         public List<Triangle> triangles;
 
-        public bool LoadFromObject(string sFileName)
+        public Mesh(string sFileName)
         {
             List<Vec3D> verts = new List<Vec3D>();
 
-            if(triangles == null)
-            {
-                triangles = new List<Triangle>();
-            }
+            triangles = new List<Triangle>();
 
             using (StreamReader sr = new StreamReader(sFileName))
             {
-
                 string line = sr.ReadLine();
                 while (!String.IsNullOrEmpty(line))
                 {
@@ -34,7 +30,7 @@ namespace grafika2
                     {
                         Vec3D vect;
 
-                        vect = new Vec3D(); 
+                        vect = new Vec3D();
 
                         string[] parts = line.Split(' ');
 
@@ -60,12 +56,8 @@ namespace grafika2
 
                     line = sr.ReadLine();
                 }
-
-
             }
 
-            return true;
         }
     }
-
 }

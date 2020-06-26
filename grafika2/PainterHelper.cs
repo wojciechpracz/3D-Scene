@@ -38,16 +38,6 @@ namespace grafika2
             };
 
         }
-
-        /// <summary>
-        /// Creates color with corrected brightness.
-        /// </summary>
-        /// <param name="color">Color to correct.</param>
-        /// <param name="correctionFactor">The brightness correction factor. Must be between -1 and 1. 
-        /// Negative values produce darker colors.</param>
-        /// <returns>
-        /// Corrected <see cref="Color"/> structure.
-        /// </returns>
         public static Color ChangeColorBrightness(Color color, float correctionFactor)
         {
             float red = (float)color.R;
@@ -69,6 +59,15 @@ namespace grafika2
             }
 
             return Color.FromArgb(color.A, (int)red, (int)green, (int)blue);
+        }
+
+        public static void ClearScreen(Bitmap bm)
+        {
+            using (Graphics gfx = Graphics.FromImage(bm))
+            using (SolidBrush brush = new SolidBrush(Color.Black))
+            {
+                gfx.FillRectangle(brush, 0, 0, bm.Width, bm.Height);
+            };
         }
     }
 }
